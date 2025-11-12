@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' https://unpkg.com https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org https://nominatim.openstreetmap.org;
+                script-src 'self' https://unpkg.com 'unsafe-inline';
+                style-src  'self' 'unsafe-inline' https://unpkg.com;
+                img-src    'self' data: https://a.tile.openstreetmap.org https://b.tile.openstreetmap.org https://c.tile.openstreetmap.org;">-->
+
+  <title>TRACE — Interactive Emotional Map Questionnaire</title>
+
+  <!-- Leaflet CSS + JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
+  <!-- Leaflet Geocoder plugin -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --bg: #f8fafc;
+      --text: #111;
+      --border: #e5e7eb;
+      --radius: 12px;
+      --shadow: 0 2px 10px rgba(0,0,0,0.05);
+      --max-width: 850px;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      background: white;
+      width: 100%;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: var(--primary-dark);
+    }
+
+    header p {
+      color: #555;
+      margin-top: 0.5rem;
+    }
+
+    main {
+      width: 100%;
+      max-width: var(--max-width);
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin: 1.5rem;
+      padding: 2rem;
+    }
+
+    h2 {
+      margin-top: 2.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+      text-align: center;
+      color: var(--primary-dark);
+    }
+
+    fieldset {
+      border: 0;
+      padding: 0;
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    label {
+      width: 100%;
+      max-width: 500px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    label.option {
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      width: auto;
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      accent-color: var(--primary);
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+      margin: 0;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      box-sizing: border-box;
+      margin-top: 4px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2,132,199,0.15);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .two {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    #map {
+      height: 400px;
+      width: 100%;
+      max-width: 700px;
+      border-radius: var(--radius);
+      margin-top: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    small {
+      text-align: center;
+      display: block;
+      color: #555;
+    }
+
+    #placesList {
+      margin-top: 10px;
+      text-align: center;
+      color: #333;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.4rem; }
+      main { margin: 0.5rem; padding: 1.2rem; }
+      input, select, textarea { font-size: 14px; }
+      #map { height: 300px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>TRACE — Territorial Representation of Affective and Cultural Experiences</h1>
+  </header>
+
+  <main>
+    <form id="traceForm" action="https://docs.google.com/forms/d/e/1FAIpQLScItKLDZpHa68_Kptrk6vhWQbzwvfXtqN9iWHFSZ61-R58a2Q/formResponse" method="POST">
+
+      <h2>1. Consent</h2>
+      <fieldset>
+        <legend>Participation consent</legend>
+        <p style="text-align:center; max-width:500px;">Your responses are anonymous and used only for academic research.</p>
+        <label class="option"><input type="radio" name="entry.CONSENT_ENTRY" value="Yes" required> I agree to participate</label>
+        <label class="option"><input type="radio" name="entry.CONSENT_ENTRY" value="No"> I do not agree</label>
+      </fieldset>
+
+      <h2>2. Contacts</h2>
+      <fieldset class="grid two">
+        <label>Email <input type="email" name="entry.2015540681" required></label>
+        <label>Confirm Email <input type="email" id="emailConfirm" required></label>
+      </fieldset>
+
+      <h2>3. Demographics</h2>
+      <fieldset class="grid two">
+        <label>Age <input type="number" name="entry.1395355739" min="16" max="120"></label>
+        <label>Gender
+          <select name="entry.1598138422" >
+            <option value="" disabled selected>Select</option>
+            <option>Male</option><option>Female</option><option>Non-binary</option><option>Other</option>
+          </select>
+        </label>
+        <label>Nationality <input type="text" name="entry.984736985"></label>
+        <label>Level of education
+          <select name="entry.1024387593">
+            <option value="" disabled selected>Select</option>
+            <option>Bachelor</option><option>Master</option><option>PhD</option>
+          </select>
+        </label>
+        <label>Field of study <input type="text" name="entry.238598843"></label>
+      </fieldset>
+
+      <h2>4. University Information</h2>
+      <fieldset class="grid two">
+        <label>Home University <input type="text" name="entry.502020402"></label>
+        <label>Current University <input type="text" name="entry.1429726177"></label>
+        <label>Status at university
+          <select name="entry.104182385">
+            <option value="" disabled selected>Select</option>
+            <option>Local student</option>
+            <option>Erasmus or exchange student</option>
+            <option>International full degree student</option>
+          </select>
+        </label>
+        <label>Are you doing a mobility?
+          <select name="entry.655464634">
+            <option value="" disabled selected>Select</option>
+            <option>Yes</option><option>No</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <h2>5. Residence & Mobility</h2>
+      <fieldset class="grid two">
+        <label>Time living in the city
+          <select name="entry.1720740402">
+            <option value="" disabled selected>Select</option>
+            <option>Less than 6 months</option>
+            <option>6-12 months</option>
+            <option>More than 1 year</option>
+          </select>
+        </label>
+        <label>Where do you live?
+          <select id="residence" name="entry.1881691895">
+            <option value="" disabled selected>Select</option>
+            <option>City center</option>
+            <option>Outskirts</option>
+            <option>Other area</option>
+          </select>
+        </label>
+        <label>Main means of transport
+          <select id="transport" name="entry.318319679">
+            <option value="" disabled selected>Select</option>
+            <option>Walking</option>
+            <option>Bicycle</option>
+            <option>Bus</option>
+            <option>Car</option>
+            <option>Motorcycle/scooter</option>
+            <option>Taxi/ride-hailing</option>
+            <option>Public transit other than bus</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>How often do you move around the city?
+          <select name="entry.691844220">
+            <option value="" disabled selected>Select</option>
+            <option>Rarely / less than once a month</option>
+            <option>Occasionally / 1-3 times a month</option>
+            <option>Frequently / 1-2 times a week</option>
+            <option>Almost every day</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <h2>6. City Perception</h2>
+      <fieldset>
+        <label>What’s more important about the city?</label>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <label class="option"><input type="checkbox" name="entry.680096777" value="People"> People</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Politics"> Politics</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Social life"> Social life</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Education"> Education</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Culture and History"> Culture and History</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Other"> Other</label>         
+        </div>
+        <label>General feeling about the city
+          <input id="feeling" name="entry.706574610" type="range" min="1" max="5" step="1" value="3" oninput="document.getElementById('feelVal').textContent=this.value">
+        </label>
+        <small>1 = very negative | <span id="feelVal">3</span> | 5 = very positive</small>
+      </fieldset>
+
+      <h2>7. Map Interaction</h2>
+      <fieldset>
+        <p style="text-align:center;">Click on the map to add a location and fill in emotional details.</p>
+        <div id="map"></div>
+        <div class="grid two">
+          <label>Place type
+            <select id="placeType">
+              <option value="" disabled selected>Select</option>
+              <option>Social</option><option>Academic</option><option>Cultural or historical</option><option>Nature</option>
+            </select>
+          </label>
+          <label>Emotional reaction
+            <select id="valence">
+              <option value="" disabled selected>Select</option>
+              <option>Positive</option><option>Neutral</option><option>Negative</option>
+            </select>
+          </label>
+        </div>
+        <label>Specific emotions (check all that apply)</label>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <label class="option"><input type="checkbox" class="emotion" value="Joy/Happiness"> Joy/Happiness</label>
+          <label class="option"><input type="checkbox" class="emotion" value="Calm/Peacefulness"> Calm/Peacefulness</label>
+          <label class="option"><input type="checkbox" class="emotion" value="Nostalgia/Melancholy"> Nostalgia/Melancholy</label>
+          <label class="option"><input type="checkbox" class="emotion" value="Excitement/Inspiration"> Excitement/Inspiration</label>
+          <label class="option"><input type="checkbox" class="emotion" value="Pride/Belonging"> Pride/Belonging</label>
+          <label class="option"><input type="checkbox" class="emotion" value="Curiosity/Interest"> Curiosity/Interest</label>
+          <label class="option"><input type="checkbox" class="emotion" value="Sadness/Loneliness"> Sadness/Loneliness</label>
+          <label class="option"><input type="checkbox" class="emotion" value="Stress/Anxiety"> Stress/Anxiety</label>
+          <label class="option"><input type="checkbox" class="emotion" value="Fear/Discomfort"> Fear/Discomfort</label>
+        </div>
+
+        <div class="grid two">
+          <label>Emotional intensity (1–5)
+            <select id="intensity">
+              <option value="" disabled selected>Select</option>
+              <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            </select>
+          </label>
+          <label>Visit frequency
+            <select id="visitFreq">
+              <option value="" disabled selected>Select</option>
+              <option>Yes, regularly</option><option>Occasionally</option><option>Rarely</option><option>Only once</option>
+            </select>
+          </label>
+        </div>
+
+        <label>Who do you visit with?</label>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <label class="option"><input type="checkbox" class="company" value="Alone"> Alone</label>
+          <label class="option"><input type="checkbox" class="company" value="Friends: same nationality"> Friends: same nationality</label>
+          <label class="option"><input type="checkbox" class="company" value="Friends: different nationality"> Friends: different nationality</label>
+          <label class="option"><input type="checkbox" class="company" value="Classmates/Colleagues"> Classmates/Colleagues</label>
+          <label class="option"><input type="checkbox" class="company" value="Locals"> Locals</label>
+          <label class="option"><input type="checkbox" id="companyOtherChk" value="Other"> Other</label>
+          <input id="companyOther" type="text" placeholder="If other, specify" style="display:none">
+        </div>
+
+        <label>Connection with city
+          <select id="connection">
+            <option value="" disabled selected>Select</option>
+            <option>Yes, definitely</option><option>To some extent</option><option>Not really</option><option>No</option>
+          </select>
+        </label>
+
+        <div style="margin-top:12px;text-align:center;">
+          <button id="addPlace" type="button">Add place</button>
+          <span id="placeStatus"></span>
+        </div>
+        <div id="placesList"></div>
+        <input type="hidden" id="placesJson" name="entry.1754670816">
+      </fieldset>
+
+      <h2>8. Additional Comments</h2>
+      <fieldset>
+        <textarea name="entry.1896791321" placeholder="Write any additional thoughts..."></textarea>
+      </fieldset>
+
+      <div style="text-align:center;margin-top:20px;">
+        <button type="submit">Submit Questionnaire</button>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    // --- Initialize Leaflet Map centered over Europe ---
+    const map = L.map('map').setView([46, 8], 4.5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    setTimeout(() => map.invalidateSize(), 400);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(p =>
+        map.setView([p.coords.latitude, p.coords.longitude], 14)
+      );
+    }
+    
+    // --- Add search bar control ---
+    L.Control.geocoder({
+      defaultMarkGeocode: false,
+      placeholder: 'Search for a location...'
+    })
+    .on('markgeocode', function(e) {
+      const latlng = e.geocode.center;
+      map.setView(latlng, 15);
+      L.marker(latlng).addTo(markerGroup);
+      lastClick = latlng;
+      document.getElementById('placeStatus').textContent =
+        `Selected: ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`;
+    })
+    .addTo(map);
+
+    let lastClick = null;
+    const places = [];
+    const markerGroup = L.layerGroup().addTo(map);
+
+    let previewMarker = null; // marker shown for current click
+    const savedMarkers = L.layerGroup().addTo(map); // permanent ones
+
+    map.on('click', e => {
+      lastClick = e.latlng;
+
+      // Remove previous preview marker (if any)
+      if (previewMarker) {
+        map.removeLayer(previewMarker);
+      }
+
+      // Add new preview marker
+      previewMarker = L.marker(e.latlng, { opacity: 0.7 }).addTo(map);
+      document.getElementById('placeStatus').textContent =
+        `Selected: ${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`;
+    });
+
+    document.getElementById('addPlace').addEventListener('click', () => {
+      if (!lastClick) return alert('Click on the map first.');
+
+      const entry = {
+        lat: lastClick.lat,
+        lng: lastClick.lng,
+        type: document.getElementById('placeType').value,
+        valence: document.getElementById('valence').value,
+        intensity: document.getElementById('intensity').value,
+        visit: document.getElementById('visitFreq').value,
+        connection: document.getElementById('connection').value,
+        emotions: Array.from(document.querySelectorAll('.emotion:checked')).map(e => e.value),
+        company: Array.from(document.querySelectorAll('.company:checked')).map(e => e.value)
+      };
+
+      // Save the entry
+      places.push(entry);
+      document.getElementById('placesJson').value = JSON.stringify(places);
+
+      // Add a *permanent* marker
+      const savedMarker = L.marker(lastClick).addTo(savedMarkers);
+      savedMarker.bindPopup(`${entry.type} - ${entry.valence}`);
+
+      // Clear preview marker
+      if (previewMarker) {
+        map.removeLayer(previewMarker);
+        previewMarker = null;
+      }
+
+      // Update list
+      const li = document.createElement('div');
+      li.textContent = `${entry.type} (${entry.lat.toFixed(3)}, ${entry.lng.toFixed(3)}) - ${entry.valence}`;
+      document.getElementById('placesList').appendChild(li);
+
+      // Clear selected point status
+      document.getElementById('placeStatus').textContent = 'Place added ✅';
+    });
+
+    // --- Email matching ---
+    const email1 = document.querySelector('input[name="entry.2015540681"]');
+    const email2 = document.getElementById('emailConfirm');
+    const form = document.getElementById('traceForm');
+    const emailError = document.createElement('div');
+    emailError.style.color = 'red';
+    emailError.style.fontSize = '14px';
+    emailError.style.marginTop = '4px';
+    emailError.style.display = 'none';
+    emailError.textContent = 'Email addresses must match.';
+    email2.insertAdjacentElement('afterend', emailError);
+    function checkEmails() {
+      if (email1.value && email2.value && email1.value !== email2.value) {
+        emailError.style.display = 'block';
+        email2.style.borderColor = 'red';
+        return false;
+      } else {
+        emailError.style.display = 'none';
+        email2.style.borderColor = '';
+        return true;
+      }
+    }
+    email1.addEventListener('input', checkEmails);
+    email2.addEventListener('input', checkEmails);
+    form.addEventListener('submit', e => {
+      if (!checkEmails()) {
+        e.preventDefault();
+        email2.focus();
+      }
+    });
+
+    // --- Consent logic ---
+    const consentYes = document.querySelector('input[value="Yes"][name="entry.CONSENT_ENTRY"]');
+    const consentNo = document.querySelector('input[value="No"][name="entry.CONSENT_ENTRY"]');
+    const consentFieldset = consentYes.closest('fieldset');
+    const allSections = Array.from(document.querySelectorAll('form fieldset, form h2'));
+    const sectionsToDisable = allSections.filter(el => el !== consentFieldset && !consentFieldset.contains(el));
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const message = document.createElement('p');
+    message.textContent = 'You must agree to participate to proceed with the questionnaire.';
+    message.style.color = 'red';
+    message.style.fontWeight = '600';
+    message.style.textAlign = 'center';
+    message.style.display = 'none';
+    consentFieldset.insertAdjacentElement('afterend', message);
+    function toggleConsent(disable) {
+      sectionsToDisable.forEach(el => {
+        el.style.pointerEvents = disable ? 'none' : '';
+        el.style.opacity = disable ? '0.5' : '1';
+      });
+      submitBtn.style.display = disable ? 'none' : 'inline-block';
+      message.style.display = disable ? 'block' : 'none';
+    }
+    consentNo.addEventListener('change', () => toggleConsent(true));
+    consentYes.addEventListener('change', () => toggleConsent(false));
+    if (consentNo.checked) toggleConsent(true);
+
+    // --- Basic spam / double-submit protection ---
+    let submitting = false;
+
+    // --- Form submission with spam protection + custom thank-you redirect ---
+    form.addEventListener('submit', e => {
+      e.preventDefault(); // prevent the default browser POST
+
+      // Prevent resubmission spam
+      if (submitting) {
+        alert('You already submitted the questionnaire. Please wait a few seconds.');
+        return;
+      }
+
+      // Optional check for empty map
+      if (places.length === 0) {
+        const confirmSubmit = confirm(
+          'You have not added any map locations. Do you still want to submit?'
+        );
+        if (!confirmSubmit) return;
+      }
+
+      // Lock submission for 10 seconds
+      submitting = true;
+      const btn = document.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
+
+      // Prepare the form data
+      const data = new FormData(form);
+
+      // Submit silently to Google Forms
+      fetch(form.action, { method: 'POST', body: data, mode: 'no-cors' })
+        .then(() => {
+          // ✅ Redirect to custom thank-you page
+          window.location.href = 'final_page_it.html';
+        })
+        .catch(() => {
+          alert('There was a problem submitting your form. Please try again later.');
+          submitting = false;
+          btn.disabled = false;
+          btn.textContent = 'Submit Questionnaire';
+        });
+
+      // Re-enable after delay (safety fallback)
+      setTimeout(() => {
+        submitting = false;
+        btn.disabled = false;
+        btn.textContent = 'Submit Questionnaire';
+      }, 10000); // 10 seconds
+    });
+
+  </script>
+</body>
+</html>

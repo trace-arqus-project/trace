@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRACE – Research Project</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --bg: #f8fafc;
+      --text: #111;
+    }
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      line-height: 1.6;
+    }
+    main {
+      max-width: 700px;
+      background: white;
+      border-radius: 12px;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    h1 {
+      text-align: center;
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+    }
+    p { margin-bottom: 1rem; }
+    .consent {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    button {
+      background: var(--primary);
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: var(--primary-dark);
+    }
+    .lang {
+      display: none;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      color: #555;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>TRACE – Territorial Representation of Affective and Cultural Experiences</h1>
+
+    <p>
+      This form is part of the research project <strong>TRACE</strong> (Territorial Representation of
+      Affective and Cultural Experiences), developed by the <strong>University of Granada</strong> and the
+      <strong>University of Padova</strong>, within the <strong>Arqus European University Alliance</strong>.
+    </p>
+    <p>
+      The project explores how students emotionally experience and connect with
+      urban spaces in Granada and Padova. Participants are invited to mark
+      locations in their city that have emotional significance, helping to create an
+      interactive emotional map that reflects students’ affective experiences and
+      intercultural perceptions of their environment.
+    </p>
+    <p>
+      Your participation will help us better understand how students interact
+      emotionally with the city and how these experiences may foster well-being,
+      inclusion, and cultural integration.
+    </p>
+    <p>
+      All responses are <strong>anonymous</strong> and will be used only for academic and research
+      purposes. Participation is <strong>voluntary</strong>, and you can stop at any time.
+    </p>
+    <p>
+      If you have any questions about this study, you can contact the research team
+      at: <a href="mailto:trace.projectarqus@gmail.com">trace.projectarqus@gmail.com</a>
+    </p>
+
+    <div class="consent">
+      <p><strong>Do you agree to participate in this study?</strong></p>
+      <button id="consentYes">Yes, I agree</button>
+      <button id="consentNo">No, I do not agree</button>
+    </div>
+
+    <div class="lang" id="langSection">
+      <p>Please choose your preferred language:</p>
+      <button onclick="window.location.href='form_en.html'">English</button>
+      <button onclick="window.location.href='form_it.html'">Italiano</button>
+      <button onclick="window.location.href='form_es.html'">Español</button>
+    </div>
+  </main>
+
+  <footer>
+    © TRACE Project · University of Granada · University of Padova · Arqus Alliance
+  </footer>
+
+  <script>
+    const yesBtn = document.getElementById('consentYes');
+    const noBtn = document.getElementById('consentNo');
+    const langSection = document.getElementById('langSection');
+    const main = document.querySelector('main');
+
+    yesBtn.addEventListener('click', () => {
+      document.querySelector('.consent').style.display = 'none';
+      langSection.style.display = 'block';
+    });
+
+    noBtn.addEventListener('click', () => {
+      document.querySelector('.consent').style.display = 'none';
+      main.innerHTML = `
+        <h1>TRACE – Thank you for your time</h1>
+        <p style="text-align:center;">
+          You have chosen not to participate. The questionnaire will now close.
+        </p>
+      `;
+      setTimeout(() => window.close(), 3000);
+    });
+  </script>
+</body>
+</html>
