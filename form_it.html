@@ -221,7 +221,7 @@
           </select>
         </label>
         <label>Nazionalità <input type="text" name="entry.984736985"></label>
-        <label>Livello di educazione
+        <label>Livello di istruzione
           <select name="entry.1024387593">
             <option value="" disabled selected>Scegli</option>
             <option value="Bachelor">Laurea triennale</option><option value="Master">Laurea magistrale</option><option value="PhD">Dottorato</option>
@@ -234,7 +234,7 @@
       <fieldset class="grid two">
         <label>Università di origine <input type="text" name="entry.502020402"></label>
         <label>Università in cui ti trovi ora <input type="text" name="entry.1429726177"></label>
-        <label>Status come studente
+        <label>Profilo studente
           <select name="entry.104182385">
             <option value="" disabled selected>Scegli</option>
             <option value="Local student">Studente locale</option>
@@ -257,7 +257,7 @@
             <option value="" disabled selected>Scegli</option>
             <option value="Less than 6 months">Meno di 6 mesi</option>
             <option value="6 - 12 months">Da 6 a 12 mesi</option>
-            <option value="More than 1 year">Piu di 1 anno</option>
+            <option value="More than 1 year">più di 1 anno</option>
           </select>
         </label>
         <label>Dove vivi?
@@ -299,7 +299,7 @@
           <label class="option"><input type="checkbox" name="entry.680096777" value="People">Persone</label>
           <label class="option"><input type="checkbox" name="entry.680096777" value="Politics">Politica</label>
           <label class="option"><input type="checkbox" name="entry.680096777" value="Social life">Vita sociale</label>
-          <label class="option"><input type="checkbox" name="entry.680096777" value="Education">Educazione</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Education">Istruzione</label>
           <label class="option"><input type="checkbox" name="entry.680096777" value="Culture and History">Storia e cultura</label>
           <label class="option"><input type="checkbox" name="entry.680096777" value="Other">Altro</label>         
         </div>
@@ -332,12 +332,12 @@
             </select>
           </label>
         </div>
-        <label>Emozioni specifiche (puoi sceglierne anche piu di una)</label>
+        <label>Emozioni specifiche (puoi sceglierne anche più di una)</label>
         <div style="display:flex;flex-direction:column;gap:8px;">
         <label class="option"><input type="checkbox" class="emotion" value="Joy/Happiness"> Gioia / Felicità</label>
         <label class="option"><input type="checkbox" class="emotion" value="Calm/Peacefulness"> Calma / Serenità</label>
         <label class="option"><input type="checkbox" class="emotion" value="Nostalgia/Melancholy"> Nostalgia / Malinconia</label>
-        <label class="option"><input type="checkbox" class="emotion" value="Excitement/Inspiration"> Eccitazione / Ispirazione</label>
+        <label class="option"><input type="checkbox" class="emotion" value="Excitement/Inspiration"> Entusiasmo / Ispirazione</label>
         <label class="option"><input type="checkbox" class="emotion" value="Pride/Belonging"> Orgoglio / Appartenenza</label>
         <label class="option"><input type="checkbox" class="emotion" value="Curiosity/Interest"> Curiosità / Interesse</label>
         <label class="option"><input type="checkbox" class="emotion" value="Sadness/Loneliness"> Tristezza / Solitudine</label>
@@ -418,7 +418,7 @@
     // --- Add search bar control ---
     L.Control.geocoder({
       defaultMarkGeocode: false,
-      placeholder: 'Search for a location...'
+      placeholder: 'Cerca...'
     })
     .on('markgeocode', function(e) {
       const latlng = e.geocode.center;
@@ -452,7 +452,7 @@
     });
 
     document.getElementById('addPlace').addEventListener('click', () => {
-      if (!lastClick) return alert('Click on the map first.');
+      if (!lastClick) return alert('Prima devi cliccare sulla mappa.');
 
       const entry = {
         lat: lastClick.lat,
@@ -486,7 +486,7 @@
       document.getElementById('placesList').appendChild(li);
 
       // Clear selected point status
-      document.getElementById('placeStatus').textContent = 'Place added ✅';
+      document.getElementById('placeStatus').textContent = 'Aggiunto ✅';
     });
 
     // --- Email matching ---
@@ -498,7 +498,7 @@
     emailError.style.fontSize = '14px';
     emailError.style.marginTop = '4px';
     emailError.style.display = 'none';
-    emailError.textContent = 'Email addresses must match.';
+    emailError.textContent = 'Le email devono coincidere.';
     email2.insertAdjacentElement('afterend', emailError);
     function checkEmails() {
       if (email1.value && email2.value && email1.value !== email2.value) {
@@ -528,14 +528,14 @@
 
       // Prevent resubmission spam
       if (submitting) {
-        alert('You already submitted the questionnaire. Please wait a few seconds.');
+        alert('Questionario già inviato. Per favore attendere qualche secondo.');
         return;
       }
 
       // Optional check for empty map
       if (places.length === 0) {
         const confirmSubmit = confirm(
-          'You have not added any map locations. Do you still want to submit?'
+          'Non hai aggiunto nessun luogo. Inviare comunque il questionario?'
         );
         if (!confirmSubmit) return;
       }
@@ -544,7 +544,7 @@
       submitting = true;
       const btn = document.querySelector('button[type="submit"]');
       btn.disabled = true;
-      btn.textContent = 'Submitting...';
+      btn.textContent = 'Invio in corso...';
 
       // Prepare the form data
       const data = new FormData(form);
@@ -556,17 +556,17 @@
           window.location.href = 'final_page_it.html';
         })
         .catch(() => {
-          alert('There was a problem submitting your form. Please try again later.');
+          alert('Problemi durante l\'invio delle risposte. Per favore provare più tardi.');
           submitting = false;
           btn.disabled = false;
-          btn.textContent = 'Submit Questionnaire';
+          btn.textContent = 'Invia risposte';
         });
 
       // Re-enable after delay (safety fallback)
       setTimeout(() => {
         submitting = false;
         btn.disabled = false;
-        btn.textContent = 'Submit Questionnaire';
+        btn.textContent = 'Invia risposte';
       }, 10000); // 10 seconds
     });
 
