@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -205,189 +205,199 @@
   <main>
     <form id="traceForm" action="https://docs.google.com/forms/d/e/1FAIpQLScItKLDZpHa68_Kptrk6vhWQbzwvfXtqN9iWHFSZ61-R58a2Q/formResponse" method="POST">
 
-      <h2>1. Contacts</h2>
+      <h2>1. Contatti</h2>
       <fieldset class="grid two">
         <label>Email <input type="email" name="entry.2015540681" required></label>
-        <label>Confirm Email <input type="email" id="emailConfirm" required></label>
+        <label>Conferma Email <input type="email" id="emailConfirm" required></label>
       </fieldset>
 
-      <h2>2. Demographics</h2>
+      <h2>2. Dati demografici</h2>
       <fieldset class="grid two">
-        <label>Age <input type="number" name="entry.1395355739" min="16" max="120"></label>
-        <label>Gender
+        <label>Età<input type="number" name="entry.1395355739" min="16" max="120"></label>
+        <label>Sesso
           <select name="entry.1598138422" >
-            <option value="" disabled selected>Select</option>
-            <option>Male</option><option>Female</option><option>Non-binary</option><option>Other</option>
+            <option value="" disabled selected>Scegli</option>
+            <option value="Male">Maschio</option><option value="Female">Femmina</option><option value="Non-binary">Non binario</option><option value="Other">Altro</option>
           </select>
         </label>
-        <label>Nationality <input type="text" name="entry.984736985"></label>
-        <label>Level of education
+        <label>Nazionalità <input type="text" name="entry.984736985"></label>
+        <label>Livello di educazione
           <select name="entry.1024387593">
-            <option value="" disabled selected>Select</option>
-            <option>Bachelor</option><option>Master</option><option>PhD</option>
+            <option value="" disabled selected>Scegli</option>
+            <option value="Bachelor">Laurea triennale</option><option value="Master">Laurea magistrale</option><option value="PhD">Dottorato</option>
           </select>
         </label>
-        <label>Field of study <input type="text" name="entry.238598843"></label>
+        <label>Campo di studio <input type="text" name="entry.238598843"></label>
       </fieldset>
 
-      <h2>3. University Information</h2>
+      <h2>3. Informazioni sull'Università</h2>
       <fieldset class="grid two">
-        <label>Home University <input type="text" name="entry.502020402"></label>
-        <label>Current University <input type="text" name="entry.1429726177"></label>
-        <label>Status at university
+        <label>Università di origine <input type="text" name="entry.502020402"></label>
+        <label>Università in cui ti trovi ora <input type="text" name="entry.1429726177"></label>
+        <label>Status come studente
           <select name="entry.104182385">
-            <option value="" disabled selected>Select</option>
-            <option>Local student</option>
-            <option>Erasmus or exchange student</option>
-            <option>International full degree student</option>
+            <option value="" disabled selected>Scegli</option>
+            <option value="Local student">Studente locale</option>
+            <option value="Erasmus or exchange student">Studente Erasmus o in scambio</option>
+            <option value="International full degree student">Studente internazionale a tempo pieno</option>
           </select>
         </label>
-        <label>Are you doing a mobility?
+        <label>Stai partecipando a un programma di mobilità?
           <select name="entry.655464634">
-            <option value="" disabled selected>Select</option>
-            <option>Yes</option><option>No</option>
+            <option value="" disabled selected>Scegli</option>
+            <option value="Yes">Si</option><option value="No">No</option>
           </select>
         </label>
       </fieldset>
 
-      <h2>4. Residence & Mobility</h2>
+      <h2>4. Residenza e mobilità</h2>
       <fieldset class="grid two">
-        <label>Time living in the city
+        <label>Da quanto tempo vivi in città?
           <select name="entry.1720740402">
-            <option value="" disabled selected>Select</option>
-            <option>Less than 6 months</option>
-            <option>6-12 months</option>
-            <option>More than 1 year</option>
+            <option value="" disabled selected>Scegli</option>
+            <option value="Less than 6 months">Meno di 6 mesi</option>
+            <option value="6-12 months">Da 6 a 12 mesi</option>
+            <option value="More than 1 year">Piu di 1 anno</option>
           </select>
         </label>
-        <label>Where do you live?
+        <label>Dove vivi?
           <select id="residence" name="entry.1881691895">
-            <option value="" disabled selected>Select</option>
-            <option>City center</option>
-            <option>Outskirts</option>
-            <option>Other area</option>
+            <option value="" disabled selected>Scegli</option>
+            <option value="City center">Centro città</option>
+            <option value="Outskirts">Periferia</option>
+            <option value="Other area">Altre zone</option>
           </select>
         </label>
-        <label>Main means of transport
+        <label>Mezzo principale di trasporto
           <select id="transport" name="entry.318319679">
-            <option value="" disabled selected>Select</option>
-            <option>Walking</option>
-            <option>Bicycle</option>
-            <option>Bus</option>
-            <option>Car</option>
-            <option>Motorcycle/scooter</option>
-            <option>Taxi/ride-hailing</option>
-            <option>Public transit other than bus</option>
-            <option>Other</option>
+            <option value="" disabled selected>Scegli</option>
+            <option value="Walking">A pied</option>
+            <option value="Bicycle">Bicicletta</option>
+            <option value="Bus">Bus</option>
+            <option value="Car">Auto</option>
+            <option value="Motorcycle/scooter">Moto / Scooter</option>
+            <option value="Taxi/ride-hailing">Taxi / App di trasporto</option>
+            <option value="Public transit other than bus">Trasporto pubblico diverso dall’autobus</option>
+            <option value="Other">Altro</option>
           </select>
         </label>
-        <label>How often do you move around the city?
+        <label>Con quale frequenza ti muovi in città?
           <select name="entry.691844220">
-            <option value="" disabled selected>Select</option>
-            <option>Rarely / less than once a month</option>
-            <option>Occasionally / 1-3 times a month</option>
-            <option>Frequently / 1-2 times a week</option>
-            <option>Almost every day</option>
+            <option value="" disabled selected>Scegli</option>
+            <option value="Rarely / less than once a month">Raramente / meno di una volta al mese</option>
+            <option value="Occasionally / 1-3 times a month">Occasionalmente / 1-3 volte al mese</option>
+            <option value="Frequently / 1-2 times a week">Frequentemente / 1-2 volte a settimana</option>
+            <option value="Almost every day">Quasi ogni giorno</option>
           </select>
         </label>
       </fieldset>
 
-      <h2>5. City Perception</h2>
+      <h2>5. Percezione della città</h2>
       <fieldset>
-        <label>What’s more important about the city?</label>
+        <label>Cosa ritieni più importante della città?</label>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <label class="option"><input type="checkbox" name="entry.680096777" value="People"> People</label>
-          <label class="option"><input type="checkbox" name="entry.680096777" value="Politics"> Politics</label>
-          <label class="option"><input type="checkbox" name="entry.680096777" value="Social life"> Social life</label>
-          <label class="option"><input type="checkbox" name="entry.680096777" value="Education"> Education</label>
-          <label class="option"><input type="checkbox" name="entry.680096777" value="Culture and History"> Culture and History</label>
-          <label class="option"><input type="checkbox" name="entry.680096777" value="Other"> Other</label>         
+          <label class="option"><input type="checkbox" name="entry.680096777" value="People">Persone</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Politics">Politica</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Social life">Vita sociale</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Education">Educazione</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Culture and History">Storia e cultura</label>
+          <label class="option"><input type="checkbox" name="entry.680096777" value="Other">Altro</label>         
         </div>
-        <label>General feeling about the city
+        <label>Percezione generale della città
           <input id="feeling" name="entry.706574610" type="range" min="1" max="5" step="1" value="3" oninput="document.getElementById('feelVal').textContent=this.value">
         </label>
-        <small>1 = very negative | <span id="feelVal">3</span> | 5 = very positive</small>
+        <small>1 = molto negativa | <span id="feelVal">3</span> | 5 = molto positiva</small>
       </fieldset>
 
-      <h2>6. Map Interaction</h2>
+      <h2>6. Mappa interattiva</h2>
       <fieldset>
-        <p style="text-align:center;">Click on the map to add a location and fill in emotional details.</p>
+        <p style="text-align:center;">Fai clic sulla mappa per aggiungere un luogo che ha per te un significato emotivo. Dopo averlo posizionato, clicca “Aggiungi” per salvarlo. Puoi aggiungerne più di uno.</p>
         <div id="map"></div>
         <div class="grid two">
-          <label>Place type
+          <label>Tipologia
             <select id="placeType">
-              <option value="" disabled selected>Select</option>
-              <option>Social</option><option>Academic</option><option>Cultural or historical</option><option>Nature</option>
+              <option value="" disabled selected>Scegli</option>
+              <option value="Social">Sociale</option>
+              <option value="Academic">Accademico</option>
+              <option value="Cultural or historical">Culturale o storico</option>
+              <option value="Nature">Natura</option>
             </select>
           </label>
-          <label>Emotional reaction
+          <label>Emozione associata
             <select id="valence">
-              <option value="" disabled selected>Select</option>
-              <option>Positive</option><option>Neutral</option><option>Negative</option>
+              <option value="" disabled selected>Scegli</option>
+              <option value="Positive">Positiva</option>
+              <option value="Neutral">Neutrale</option>
+              <option value="Negative">Negativa</option>
             </select>
           </label>
         </div>
-        <label>Specific emotions (check all that apply)</label>
+        <label>Emozioni specifiche (puoi sceglierne anche piu di una)</label>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <label class="option"><input type="checkbox" class="emotion" value="Joy/Happiness"> Joy/Happiness</label>
-          <label class="option"><input type="checkbox" class="emotion" value="Calm/Peacefulness"> Calm/Peacefulness</label>
-          <label class="option"><input type="checkbox" class="emotion" value="Nostalgia/Melancholy"> Nostalgia/Melancholy</label>
-          <label class="option"><input type="checkbox" class="emotion" value="Excitement/Inspiration"> Excitement/Inspiration</label>
-          <label class="option"><input type="checkbox" class="emotion" value="Pride/Belonging"> Pride/Belonging</label>
-          <label class="option"><input type="checkbox" class="emotion" value="Curiosity/Interest"> Curiosity/Interest</label>
-          <label class="option"><input type="checkbox" class="emotion" value="Sadness/Loneliness"> Sadness/Loneliness</label>
-          <label class="option"><input type="checkbox" class="emotion" value="Stress/Anxiety"> Stress/Anxiety</label>
-          <label class="option"><input type="checkbox" class="emotion" value="Fear/Discomfort"> Fear/Discomfort</label>
+        <label class="option"><input type="checkbox" class="emotion" value="Joy/Happiness"> Gioia / Felicità</label>
+        <label class="option"><input type="checkbox" class="emotion" value="Calm/Peacefulness"> Calma / Serenità</label>
+        <label class="option"><input type="checkbox" class="emotion" value="Nostalgia/Melancholy"> Nostalgia / Malinconia</label>
+        <label class="option"><input type="checkbox" class="emotion" value="Excitement/Inspiration"> Eccitazione / Ispirazione</label>
+        <label class="option"><input type="checkbox" class="emotion" value="Pride/Belonging"> Orgoglio / Appartenenza</label>
+        <label class="option"><input type="checkbox" class="emotion" value="Curiosity/Interest"> Curiosità / Interesse</label>
+        <label class="option"><input type="checkbox" class="emotion" value="Sadness/Loneliness"> Tristezza / Solitudine</label>
+        <label class="option"><input type="checkbox" class="emotion" value="Stress/Anxiety"> Stress / Ansia</label>
+        <label class="option"><input type="checkbox" class="emotion" value="Fear/Discomfort"> Paura / Disagio</label>
         </div>
 
         <div class="grid two">
-          <label>Emotional intensity (1–5)
+          <label>Intensità dell'emozione (1–5)
             <select id="intensity">
-              <option value="" disabled selected>Select</option>
+              <option value="" disabled selected>Scegli</option>
               <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
             </select>
           </label>
-          <label>Visit frequency
+          <label>Quante volte visiti questo luogo?
             <select id="visitFreq">
-              <option value="" disabled selected>Select</option>
-              <option>Yes, regularly</option><option>Occasionally</option><option>Rarely</option><option>Only once</option>
+            <option value="" disabled selected>Scegli</option>
+            <option value="Yes, regularly">Regolarmente</option>
+            <option value="Occasionally">Occasionalmente</option>
+            <option value="Rarely">Raramente</option>
+            <option value="Only once">Solo una volta</option>
             </select>
           </label>
         </div>
 
-        <label>Who do you visit with?</label>
+        <label>Con chi frequenti questo luogo?</label>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <label class="option"><input type="checkbox" class="company" value="Alone"> Alone</label>
-          <label class="option"><input type="checkbox" class="company" value="Friends: same nationality"> Friends: same nationality</label>
-          <label class="option"><input type="checkbox" class="company" value="Friends: different nationality"> Friends: different nationality</label>
-          <label class="option"><input type="checkbox" class="company" value="Classmates/Colleagues"> Classmates/Colleagues</label>
-          <label class="option"><input type="checkbox" class="company" value="Locals"> Locals</label>
-          <label class="option"><input type="checkbox" id="companyOtherChk" value="Other"> Other</label>
-          <input id="companyOther" type="text" placeholder="If other, specify" style="display:none">
+        <label class="option"><input type="checkbox" class="company" value="Alone">Da solo/a</label>
+        <label class="option"><input type="checkbox" class="company" value="Friends: same nationality">Amici: stessa nazionalità</label>
+        <label class="option"><input type="checkbox" class="company" value="Friends: different nationality">Amici: nazionalità diversa</label>
+        <label class="option"><input type="checkbox" class="company" value="Classmates/Colleagues">Compagni di corso / Colleghi</label>
+        <label class="option"><input type="checkbox" class="company" value="Locals">Persone del posto</label>
+        <label class="option"><input type="checkbox" id="companyOtherChk" value="Other">Altro</label>
         </div>
 
-        <label>Connection with city
+        <label>Ti senti connesso con il luogo?
           <select id="connection">
-            <option value="" disabled selected>Select</option>
-            <option>Yes, definitely</option><option>To some extent</option><option>Not really</option><option>No</option>
+            <option value="" disabled selected>Scegli</option>
+            <option value="Yes, definitely">Sì, sicuramente</option>
+            <option value="To some extent">In una certa misura</option>
+            <option value="Not really">Non molto</option>
+            <option value="No">No</option>
           </select>
         </label>
 
         <div style="margin-top:12px;text-align:center;">
-          <button id="addPlace" type="button">Add place</button>
+          <button id="addPlace" type="button">Aggiungi</button>
           <span id="placeStatus"></span>
         </div>
         <div id="placesList"></div>
         <input type="hidden" id="placesJson" name="entry.1754670816">
       </fieldset>
 
-      <h2>7. Additional Comments</h2>
+      <h2>7. Commenti</h2>
       <fieldset>
-        <textarea name="entry.1896791321" placeholder="Write any additional thoughts..."></textarea>
+        <textarea name="entry.1896791321" placeholder="Scrivi qualsiasi altra cosa ti venga in mente..."></textarea>
       </fieldset>
 
       <div style="text-align:center;margin-top:20px;">
-        <button type="submit">Submit Questionnaire</button>
+        <button type="submit">Invia risposte</button>
       </div>
     </form>
   </main>
