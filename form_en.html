@@ -205,21 +205,13 @@
   <main>
     <form id="traceForm" action="https://docs.google.com/forms/d/e/1FAIpQLScItKLDZpHa68_Kptrk6vhWQbzwvfXtqN9iWHFSZ61-R58a2Q/formResponse" method="POST">
 
-      <h2>1. Consent</h2>
-      <fieldset>
-        <legend>Participation consent</legend>
-        <p style="text-align:center; max-width:500px;">Your responses are anonymous and used only for academic research.</p>
-        <label class="option"><input type="radio" name="entry.CONSENT_ENTRY" value="Yes" required> I agree to participate</label>
-        <label class="option"><input type="radio" name="entry.CONSENT_ENTRY" value="No"> I do not agree</label>
-      </fieldset>
-
-      <h2>2. Contacts</h2>
+      <h2>1. Contacts</h2>
       <fieldset class="grid two">
         <label>Email <input type="email" name="entry.2015540681" required></label>
         <label>Confirm Email <input type="email" id="emailConfirm" required></label>
       </fieldset>
 
-      <h2>3. Demographics</h2>
+      <h2>2. Demographics</h2>
       <fieldset class="grid two">
         <label>Age <input type="number" name="entry.1395355739" min="16" max="120"></label>
         <label>Gender
@@ -238,7 +230,7 @@
         <label>Field of study <input type="text" name="entry.238598843"></label>
       </fieldset>
 
-      <h2>4. University Information</h2>
+      <h2>3. University Information</h2>
       <fieldset class="grid two">
         <label>Home University <input type="text" name="entry.502020402"></label>
         <label>Current University <input type="text" name="entry.1429726177"></label>
@@ -258,7 +250,7 @@
         </label>
       </fieldset>
 
-      <h2>5. Residence & Mobility</h2>
+      <h2>4. Residence & Mobility</h2>
       <fieldset class="grid two">
         <label>Time living in the city
           <select name="entry.1720740402">
@@ -300,7 +292,7 @@
         </label>
       </fieldset>
 
-      <h2>6. City Perception</h2>
+      <h2>5. City Perception</h2>
       <fieldset>
         <label>What’s more important about the city?</label>
         <div style="display:flex;flex-direction:column;gap:8px;">
@@ -317,7 +309,7 @@
         <small>1 = very negative | <span id="feelVal">3</span> | 5 = very positive</small>
       </fieldset>
 
-      <h2>7. Map Interaction</h2>
+      <h2>6. Map Interaction</h2>
       <fieldset>
         <p style="text-align:center;">Click on the map to add a location and fill in emotional details.</p>
         <div id="map"></div>
@@ -389,7 +381,7 @@
         <input type="hidden" id="placesJson" name="entry.1754670816">
       </fieldset>
 
-      <h2>8. Additional Comments</h2>
+      <h2>7. Additional Comments</h2>
       <fieldset>
         <textarea name="entry.1896791321" placeholder="Write any additional thoughts..."></textarea>
       </fieldset>
@@ -517,33 +509,6 @@
         email2.focus();
       }
     });
-
-    // --- Consent logic ---
-    const consentYes = document.querySelector('input[value="Yes"][name="entry.CONSENT_ENTRY"]');
-    const consentNo = document.querySelector('input[value="No"][name="entry.CONSENT_ENTRY"]');
-    const consentFieldset = consentYes.closest('fieldset');
-    const allSections = Array.from(document.querySelectorAll('form fieldset, form h2'));
-    const sectionsToDisable = allSections.filter(el => el !== consentFieldset && !consentFieldset.contains(el));
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const message = document.createElement('p');
-    message.textContent = 'You must agree to participate to proceed with the questionnaire.';
-    message.style.color = 'red';
-    message.style.fontWeight = '600';
-    message.style.textAlign = 'center';
-    message.style.display = 'none';
-    consentFieldset.insertAdjacentElement('afterend', message);
-    function toggleConsent(disable) {
-      sectionsToDisable.forEach(el => {
-        el.style.pointerEvents = disable ? 'none' : '';
-        el.style.opacity = disable ? '0.5' : '1';
-      });
-      submitBtn.style.display = disable ? 'none' : 'inline-block';
-      message.style.display = disable ? 'block' : 'none';
-    }
-    consentNo.addEventListener('change', () => toggleConsent(true));
-    consentYes.addEventListener('change', () => toggleConsent(false));
-    if (consentNo.checked) toggleConsent(true);
-
     // --- Basic spam / double-submit protection ---
     let submitting = false;
 
