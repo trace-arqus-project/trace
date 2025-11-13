@@ -46,6 +46,7 @@
       text-align: center;
       color: var(--primary-dark);
       margin: 0;
+      word-break: break-word; /* <-- ADD THIS */
     }
 
     h2 {
@@ -86,6 +87,8 @@
       flex-direction: column;
       align-items: center; /* Center all content blocks */
       gap: 1.25rem;
+      width: 100%; /* <-- ADD THIS */
+      box-sizing: border-box; /* <-- AND ADD THIS */
     }
     
     /* --- Form Elements --- */
