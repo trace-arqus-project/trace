@@ -18,112 +18,107 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
-  <style>
-    :root {
+<style>
+  :root {
       --primary: #0284c7;
       --primary-dark: #0369a1;
       --bg: #f8fafc;
-      --text: #111;
-      --border: #e5e7eb;
+      --bg-page: #f1f5f9; /* Slightly darker page background for contrast */
+      --text: #0f172a; /* Darker text */
+      --text-light: #475569;
+      --border: #e2e8f0;
       --radius: 12px;
-      --shadow: 0 2px 10px rgba(0,0,0,0.05);
+      --shadow: 0 4px 12px rgba(0,0,0,0.05);
       --max-width: 850px;
+      --max-content-width: 700px;
     }
 
+    /* --- Base & Typography --- */
     body {
-      font-family: system-ui, sans-serif;
-      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg-page);
       color: var(--text);
       margin: 0;
       line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
-    header {
+    h1, h2 {
       text-align: center;
-      padding: 2rem 1rem 1rem;
-      background: white;
-      width: 100%;
-      box-shadow: var(--shadow);
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 1.8rem;
       color: var(--primary-dark);
-    }
-
-    header p {
-      color: #555;
-      margin-top: 0.5rem;
-    }
-
-    main {
-      width: 100%;
-      max-width: var(--max-width);
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin: 1.5rem;
-      padding: 2rem;
+      margin: 0;
     }
 
     h2 {
       margin-top: 2.5rem;
       padding-bottom: 0.5rem;
       border-bottom: 2px solid var(--border);
-      text-align: center;
-      color: var(--primary-dark);
     }
 
+    p, small {
+      color: var(--text-light);
+      text-align: center;
+    }
+    
+    /* --- Main Layout --- */
+    header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      background: var(--bg);
+      width: 100%;
+      box-shadow: var(--shadow);
+    }
+    
+    main {
+      width: 100%;
+      max-width: var(--max-width);
+      background: var(--bg);
+      margin: 0 auto; /* Center on desktop */
+      padding: 1rem; /* Mobile padding */
+      box-sizing: border-box;
+    }
+
+    /* --- Form Structure --- */
     fieldset {
       border: 0;
       padding: 0;
-      margin: 1rem 0;
+      margin: 1.5rem 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 0.8rem;
+      align-items: center; /* Center all content blocks */
+      gap: 1.25rem;
+    }
+    
+    /* --- Form Elements --- */
+    label,
+    .grid,
+    .option-group,
+    #map,
+    fieldset > p,
+    fieldset > textarea {
+      width: 100%;
+      max-width: var(--max-content-width); /* CONSISTENT WIDTH */
+      box-sizing: border-box;
     }
 
     label {
-      width: 100%;
-      max-width: 500px;
       font-weight: 600;
       display: flex;
       flex-direction: column;
       text-align: left;
-    }
-
-    label.option {
-      flex-direction: row;
-      align-items: center;
-      gap: 8px;
-      font-weight: 500;
-      width: auto;
-    }
-
-    input[type="checkbox"],
-    input[type="radio"] {
-      accent-color: var(--primary);
-      cursor: pointer;
-      width: 18px;
-      height: 18px;
-      margin: 0;
+      gap: 0.5rem;
     }
 
     input,
     select,
     textarea {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ccc;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
       border-radius: 8px;
-      font-size: 15px;
+      font-size: 16px; /* 16px prevents iOS zoom */
       box-sizing: border-box;
-      margin-top: 4px;
+      background: white;
+      color: var(--text);
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
@@ -136,65 +131,101 @@
     }
 
     textarea {
-      min-height: 100px;
+      min-height: 120px;
       resize: vertical;
     }
+    
+    /* --- Checkbox / Radio Options --- */
+    .option-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+    
+    label.option {
+      flex-direction: row;
+      align-items: flex-start; /* Align to top for text wrapping */
+      gap: 12px;
+      font-weight: 500;
+      width: 100%;
+    }
 
+    input[type="checkbox"],
+    input[type="radio"] {
+      accent-color: var(--primary);
+      cursor: pointer;
+      width: 20px; /* Bigger touch target */
+      height: 20px; /* Bigger touch target */
+      margin: 0;
+      flex-shrink: 0; /* Don't shrink */
+      margin-top: 4px; /* Align with first line of text */
+    }
+
+    /* --- Grids & Map --- */
     .grid {
       display: grid;
       gap: 16px;
-      width: 100%;
-      max-width: 700px;
     }
 
     .two {
+      /* This is already responsive! Stays 1 column on mobile. */
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
 
     #map {
-      height: 400px;
-      width: 100%;
-      max-width: 700px;
+      height: 350px; /* Good mobile height */
       border-radius: var(--radius);
-      margin-top: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 10; /* Ensure map is on top */
     }
 
+    /* --- Buttons --- */
     button {
       background: var(--primary);
       color: white;
       border: 0;
       border-radius: 8px;
-      padding: 12px 20px;
+      padding: 14px 24px;
       font-weight: 600;
+      font-size: 16px;
       cursor: pointer;
       transition: background 0.2s, transform 0.1s;
     }
 
-    button:hover {
+    button:hover,
+    button:focus {
       background: var(--primary-dark);
       transform: translateY(-1px);
+      outline: none;
     }
-
-    small {
-      text-align: center;
-      display: block;
-      color: #555;
+    
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
     }
 
     #placesList {
       margin-top: 10px;
       text-align: center;
-      color: #333;
+      color: var(--text);
     }
 
-    @media (max-width: 600px) {
-      header h1 { font-size: 1.4rem; }
-      main { margin: 0.5rem; padding: 1.2rem; }
-      input, select, textarea { font-size: 14px; }
-      #map { height: 300px; }
+    /* --- Desktop & Tablet Enhancements --- */
+    @media (min-width: 640px) {
+      main {
+        margin: 1.5rem auto;
+        padding: 2.5rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+      }
+
+      #map {
+        height: 400px;
+      }
     }
-  </style>
+</style>
 </head>
 
 <body>
@@ -295,7 +326,7 @@
       <h2>5. City Perception</h2>
       <fieldset>
         <label>What’s more important about the city?</label>
-        <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="option-group">
           <label class="option"><input type="checkbox" name="entry.680096777" value="People"> People</label>
           <label class="option"><input type="checkbox" name="entry.680096777" value="Politics"> Politics</label>
           <label class="option"><input type="checkbox" name="entry.680096777" value="Social life"> Social life</label>
@@ -331,7 +362,7 @@
           </label>
         </div>
         <label>Specific emotions (check all that apply)</label>
-        <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="option-group">
           <label class="option"><input type="checkbox" class="emotion" value="Joy/Happiness"> Joy/Happiness</label>
           <label class="option"><input type="checkbox" class="emotion" value="Calm/Peacefulness"> Calm/Peacefulness</label>
           <label class="option"><input type="checkbox" class="emotion" value="Nostalgia/Melancholy"> Nostalgia/Melancholy</label>
@@ -359,7 +390,7 @@
         </div>
 
         <label>Who do you visit with?</label>
-        <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="option-group">
           <label class="option"><input type="checkbox" class="company" value="Alone"> Alone</label>
           <label class="option"><input type="checkbox" class="company" value="Friends: same nationality">Friends: same nationality</label>
           <label class="option"><input type="checkbox" class="company" value="Friends: different nationality">Friends: different nationality</label>
