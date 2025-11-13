@@ -409,19 +409,15 @@
         map.setView([p.coords.latitude, p.coords.longitude], 14)
       );
     }
-    
+    -
     // --- Add search bar control ---
     L.Control.geocoder({
-      defaultMarkGeocode: false,
+      defaultMarkGeocode: false, // This correctly disables the default marker
       placeholder: 'Search for a location...'
     })
     .on('markgeocode', function(e) {
-      const latlng = e.geocode.center;
-      map.setView(latlng, 15);
-      L.marker(latlng).addTo(markerGroup);
-      lastClick = latlng;
-      document.getElementById('placeStatus').textContent =
-        `Selected: ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`;
+      // We only want the search to move the map, not add a marker or select a point
+      map.setView(e.geocode.center, 15);
     })
     .addTo(map);
 
