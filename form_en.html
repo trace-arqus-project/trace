@@ -313,6 +313,9 @@
       <fieldset>
         <p style="text-align:center;">Click on the map to add a location and fill in emotional details.</p>
         <div id="map"></div>
+        <label style="max-width: 700px; margin-top: 12px; align-self: center;">Location Name
+          <input type="text" id="placeName">
+        </label>
         <div class="grid two">
           <label>Place type
             <select id="placeType">
@@ -358,11 +361,13 @@
         <label>Who do you visit with?</label>
         <div style="display:flex;flex-direction:column;gap:8px;">
           <label class="option"><input type="checkbox" class="company" value="Alone"> Alone</label>
-          <label class="option"><input type="checkbox" class="company" value="Friends: same nationality"> Friends: same nationality</label>
-          <label class="option"><input type="checkbox" class="company" value="Friends: different nationality"> Friends: different nationality</label>
-          <label class="option"><input type="checkbox" class="company" value="Classmates/Colleagues"> Classmates/Colleagues</label>
-          <label class="option"><input type="checkbox" class="company" value="Locals"> Locals</label>
-          <label class="option"><input type="checkbox" id="companyOtherChk" value="Other"> Other</label>
+          <label class="option"><input type="checkbox" class="company" value="Friends: same nationality">Friends: same nationality</label>
+          <label class="option"><input type="checkbox" class="company" value="Friends: different nationality">Friends: different nationality</label>
+          <label class="option"><input type="checkbox" class="company" value="Classmates/Colleagues">Classmates/Colleagues</label>
+          <label class="option"><input type="checkbox" class="company" value="Family">Family</label>
+          <label class="option"><input type="checkbox" class="company" value="Partner">Partner</label>
+          <label class="option"><input type="checkbox" class="company" value="Locals">Locals</label>
+          <label class="option"><input type="checkbox" id="companyOtherChk" value="Other">Other</label>
           <input id="companyOther" type="text" placeholder="If other, specify" style="display:none">
         </div>
 
@@ -447,6 +452,7 @@
       const entry = {
         lat: lastClick.lat,
         lng: lastClick.lng,
+        name: document.getElementById('placeName').value,
         type: document.getElementById('placeType').value,
         valence: document.getElementById('valence').value,
         intensity: document.getElementById('intensity').value,
@@ -462,7 +468,8 @@
 
       // Add a *permanent* marker
       const savedMarker = L.marker(lastClick).addTo(savedMarkers);
-      savedMarker.bindPopup(`${entry.type} - ${entry.valence}`);
+      const popupText = entry.name ? `${entry.name} (${entry.type})` : `${entry.type}`;
+      savedMarker.bindPopup(`${popupText} - ${entry.valence}`);
 
       // Clear preview marker
       if (previewMarker) {
@@ -472,8 +479,12 @@
 
       // Update list
       const li = document.createElement('div');
-      li.textContent = `${entry.type} (${entry.lat.toFixed(3)}, ${entry.lng.toFixed(3)}) - ${entry.valence}`;
+      const listText = entry.name || entry.type;
+      li.textContent = `${listText} (${entry.lat.toFixed(3)}, ${entry.lng.toFixed(3)}) - ${entry.valence}`;
       document.getElementById('placesList').appendChild(li);
+
+      // Clear the name field for the next entry
+      document.getElementById('placeName').value = ''; 
 
       // Clear selected point status
       document.getElementById('placeStatus').textContent = 'Place added ✅';

@@ -313,6 +313,9 @@
       <fieldset>
         <p style="text-align:center;">Fai clic sulla mappa per aggiungere un luogo che ha per te un significato emotivo. Dopo averlo posizionato, clicca “Aggiungi” per salvarlo. Puoi aggiungerne più di uno.</p>
         <div id="map"></div>
+        <label style="max-width: 700px; margin-top: 12px; align-self: center;">Nome del luogo
+          <input type="text" id="placeName">
+        </label>
         <div class="grid two">
           <label>Tipologia
             <select id="placeType">
@@ -369,6 +372,8 @@
         <label class="option"><input type="checkbox" class="company" value="Friends: same nationality">Amici: stessa nazionalità</label>
         <label class="option"><input type="checkbox" class="company" value="Friends: different nationality">Amici: nazionalità diversa</label>
         <label class="option"><input type="checkbox" class="company" value="Classmates/Colleagues">Compagni di corso / Colleghi</label>
+        <label class="option"><input type="checkbox" class="company" value="Family">Familiari</label>
+        <label class="option"><input type="checkbox" class="company" value="Partner">Partner</label>
         <label class="option"><input type="checkbox" class="company" value="Locals">Persone del posto</label>
         <label class="option"><input type="checkbox" id="companyOtherChk" value="Other">Altro</label>
         </div>
@@ -452,11 +457,12 @@
     });
 
     document.getElementById('addPlace').addEventListener('click', () => {
-      if (!lastClick) return alert('Prima devi cliccare sulla mappa.');
+      if (!lastClick) return alert('Click on the map first.');
 
       const entry = {
         lat: lastClick.lat,
         lng: lastClick.lng,
+        name: document.getElementById('placeName').value,
         type: document.getElementById('placeType').value,
         valence: document.getElementById('valence').value,
         intensity: document.getElementById('intensity').value,
@@ -472,7 +478,8 @@
 
       // Add a *permanent* marker
       const savedMarker = L.marker(lastClick).addTo(savedMarkers);
-      savedMarker.bindPopup(`${entry.type} - ${entry.valence}`);
+      const popupText = entry.name ? `${entry.name} (${entry.type})` : `${entry.type}`;
+      savedMarker.bindPopup(`${popupText} - ${entry.valence}`);
 
       // Clear preview marker
       if (previewMarker) {
@@ -482,8 +489,12 @@
 
       // Update list
       const li = document.createElement('div');
-      li.textContent = `${entry.type} (${entry.lat.toFixed(3)}, ${entry.lng.toFixed(3)}) - ${entry.valence}`;
+      const listText = entry.name || entry.type;
+      li.textContent = `${listText} (${entry.lat.toFixed(3)}, ${entry.lng.toFixed(3)}) - ${entry.valence}`;
       document.getElementById('placesList').appendChild(li);
+
+      // Clear the name field for the next entry
+      document.getElementById('placeName').value = ''; 
 
       // Clear selected point status
       document.getElementById('placeStatus').textContent = 'Aggiunto ✅';

@@ -244,7 +244,7 @@
             <option value="" disabled selected>Selecciona</option>
             <option value="Local student">Estudiante local</option>
             <option value="Erasmus or exchange student">Estudiante Erasmus o de intercambio</option>
-            <option value="International full degree student">Estudiante internacional a tiempo completo</option>
+            <option value="International full degree student">Estudiante internacional que realiza los estudios completos.</option>
           </select>
         </label>
         <label>¿Estás participando en un programa de movilidad?
@@ -318,6 +318,9 @@
       <fieldset>
         <p style="text-align:center;">Haz clic en el mapa para añadir un lugar que tenga un significado emotivo para ti. Después de colocarlo, haz clic en “Añadir” para guardarlo. Puedes añadir más de uno.</p>
         <div id="map"></div>
+        <label style="max-width: 700px; margin-top: 12px; align-self: center;">Nombre del lugar
+          <input type="text" id="placeName">
+        </label>
         <div class="grid two">
           <label>Tipo de lugar
             <select id="placeType">
@@ -374,6 +377,8 @@
         <label class="option"><input type="checkbox" class="company" value="Friends: same nationality">Amigos de la misma nacionalidad</label>
         <label class="option"><input type="checkbox" class="company" value="Friends: different nationality">Amigos de nacionalidad diferente</label>
         <label class="option"><input type="checkbox" class="company" value="Classmates/Colleagues">Compañeros de clase</label>
+        <label class="option"><input type="checkbox" class="company" value="Family">Familiares</label>
+        <label class="option"><input type="checkbox" class="company" value="Partner">Pareja</label>
         <label class="option"><input type="checkbox" class="company" value="Locals">Gente del lugar</label>
         <label class="option"><input type="checkbox" id="companyOtherChk" value="Other">Otro</label>
         </div>
@@ -457,11 +462,12 @@
     });
 
     document.getElementById('addPlace').addEventListener('click', () => {
-      if (!lastClick) return alert('Por favor, haz clic en el mapa primero.');
+      if (!lastClick) return alert('Click on the map first.');
 
       const entry = {
         lat: lastClick.lat,
         lng: lastClick.lng,
+        name: document.getElementById('placeName').value,
         type: document.getElementById('placeType').value,
         valence: document.getElementById('valence').value,
         intensity: document.getElementById('intensity').value,
@@ -477,7 +483,8 @@
 
       // Add a *permanent* marker
       const savedMarker = L.marker(lastClick).addTo(savedMarkers);
-      savedMarker.bindPopup(`${entry.type} - ${entry.valence}`);
+      const popupText = entry.name ? `${entry.name} (${entry.type})` : `${entry.type}`;
+      savedMarker.bindPopup(`${popupText} - ${entry.valence}`);
 
       // Clear preview marker
       if (previewMarker) {
@@ -487,8 +494,12 @@
 
       // Update list
       const li = document.createElement('div');
-      li.textContent = `${entry.type} (${entry.lat.toFixed(3)}, ${entry.lng.toFixed(3)}) - ${entry.valence}`;
+      const listText = entry.name || entry.type;
+      li.textContent = `${listText} (${entry.lat.toFixed(3)}, ${entry.lng.toFixed(3)}) - ${entry.valence}`;
       document.getElementById('placesList').appendChild(li);
+
+      // Clear the name field for the next entry
+      document.getElementById('placeName').value = ''; 
 
       // Clear selected point status
       document.getElementById('placeStatus').textContent = 'Lugar añadido ✅';
